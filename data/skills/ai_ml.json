@@ -1,0 +1,31 @@
+{
+  "category": "ai_ml",
+  "skills": [
+    {"canonical": "Machine Learning", "aliases": ["ml", "machine-learning"]},
+    {"canonical": "Deep Learning", "aliases": ["dl", "deep-learning"]},
+    {"canonical": "Natural Language Processing", "aliases": ["nlp"]},
+    {"canonical": "Computer Vision", "aliases": ["cv", "computer-vision"]},
+    {"canonical": "PyTorch", "aliases": ["torch"]},
+    {"canonical": "TensorFlow", "aliases": ["tf", "tensor flow"]},
+    {"canonical": "scikit-learn", "aliases": ["sklearn", "scikit learn"]},
+    {"canonical": "Keras", "aliases": ["keras"]},
+    {"canonical": "Hugging Face Transformers", "aliases": ["huggingface", "transformers", "hf transformers"]},
+    {"canonical": "Large Language Models", "aliases": ["llm", "llms", "large language model"]},
+    {"canonical": "Retrieval-Augmented Generation", "aliases": ["rag", "retrieval augmented generation"]},
+    {"canonical": "Vector Databases", "aliases": ["vector db", "vector database", "vector search"]},
+    {"canonical": "Embeddings", "aliases": ["text embeddings", "embedding models"]},
+    {"canonical": "Prompt Engineering", "aliases": ["prompt design"]},
+    {"canonical": "Agentic AI", "aliases": ["ai agents", "multi-agent systems", "agent orchestration"]},
+    {"canonical": "MLOps", "aliases": ["ml ops", "ml operations"]},
+    {"canonical": "Reinforcement Learning", "aliases": ["rl"]},
+    {"canonical": "Pandas", "aliases": ["pandas"]},
+    {"canonical": "NumPy", "aliases": ["numpy"]},
+    {"canonical": "spaCy", "aliases": ["spacy"]},
+    {"canonical": "OpenCV", "aliases": ["opencv", "cv2"]},
+    {"canonical": "MLflow", "aliases": ["ml flow"]},
+    {"canonical": "LangChain", "aliases": ["lang chain"]},
+    {"canonical": "Qdrant", "aliases": ["qdrant"]},
+    {"canonical": "Pinecone", "aliases": ["pinecone"]},
+    {"canonical": "FAISS", "aliases": ["faiss"]}
+  ]
+}

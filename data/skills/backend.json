@@ -1,0 +1,17 @@
+{
+  "category": "frameworks_backend",
+  "skills": [
+    {"canonical": "FastAPI", "aliases": ["fast api"]},
+    {"canonical": "Flask", "aliases": ["flask"]},
+    {"canonical": "Django", "aliases": ["django"]},
+    {"canonical": "Node.js", "aliases": ["nodejs", "node js", "node"]},
+    {"canonical": "Express.js", "aliases": ["express", "expressjs"]},
+    {"canonical": "Spring Boot", "aliases": ["springboot", "spring"]},
+    {"canonical": ".NET", "aliases": ["dotnet", "asp.net", "dot net"]},
+    {"canonical": "GraphQL", "aliases": ["graph ql"]},
+    {"canonical": "REST APIs", "aliases": ["rest", "restful", "rest api", "restful api"]},
+    {"canonical": "gRPC", "aliases": ["grpc"]},
+    {"canonical": "Celery", "aliases": ["celery"]},
+    {"canonical": "Microservices", "aliases": ["microservice architecture"]}
+  ]
+}

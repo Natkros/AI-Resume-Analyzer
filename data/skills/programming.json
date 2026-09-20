@@ -1,0 +1,21 @@
+{
+  "category": "programming_languages",
+  "skills": [
+    {"canonical": "Python", "aliases": ["python3", "py"]},
+    {"canonical": "JavaScript", "aliases": ["js", "javascript", "ecmascript"]},
+    {"canonical": "TypeScript", "aliases": ["ts", "typescript"]},
+    {"canonical": "Java", "aliases": ["java"]},
+    {"canonical": "C++", "aliases": ["cpp", "c plus plus"]},
+    {"canonical": "C#", "aliases": ["csharp", "c sharp", ".net c#"]},
+    {"canonical": "Go", "aliases": ["golang"]},
+    {"canonical": "Rust", "aliases": ["rust-lang", "rustlang"]},
+    {"canonical": "SQL", "aliases": ["structured query language"]},
+    {"canonical": "R", "aliases": ["r language", "r programming"]},
+    {"canonical": "Ruby", "aliases": ["ruby lang"]},
+    {"canonical": "PHP", "aliases": ["php"]},
+    {"canonical": "Kotlin", "aliases": ["kotlin"]},
+    {"canonical": "Swift", "aliases": ["swift"]},
+    {"canonical": "Scala", "aliases": ["scala"]},
+    {"canonical": "Bash", "aliases": ["shell scripting", "shell script", "bash scripting"]}
+  ]
+}

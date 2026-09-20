@@ -1,0 +1,16 @@
+{
+  "category": "devops",
+  "skills": [
+    {"canonical": "Docker", "aliases": ["dockerized", "containerization"]},
+    {"canonical": "Kubernetes", "aliases": ["k8s"]},
+    {"canonical": "Terraform", "aliases": ["terraform iac"]},
+    {"canonical": "CI/CD", "aliases": ["continuous integration", "continuous deployment", "ci cd"]},
+    {"canonical": "GitHub Actions", "aliases": ["github actions", "gh actions"]},
+    {"canonical": "Jenkins", "aliases": ["jenkins ci"]},
+    {"canonical": "Git", "aliases": ["git version control"]},
+    {"canonical": "Ansible", "aliases": ["ansible"]},
+    {"canonical": "Prometheus", "aliases": ["prometheus monitoring"]},
+    {"canonical": "Grafana", "aliases": ["grafana dashboards"]},
+    {"canonical": "Nginx", "aliases": ["nginx"]}
+  ]
+}

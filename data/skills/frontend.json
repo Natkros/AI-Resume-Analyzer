@@ -1,0 +1,14 @@
+{
+  "category": "frameworks_frontend",
+  "skills": [
+    {"canonical": "React", "aliases": ["reactjs", "react.js", "react js"]},
+    {"canonical": "Next.js", "aliases": ["nextjs", "next js"]},
+    {"canonical": "Vue.js", "aliases": ["vuejs", "vue"]},
+    {"canonical": "Angular", "aliases": ["angularjs", "angular.js"]},
+    {"canonical": "Tailwind CSS", "aliases": ["tailwind", "tailwindcss"]},
+    {"canonical": "Redux", "aliases": ["redux"]},
+    {"canonical": "HTML", "aliases": ["html5"]},
+    {"canonical": "CSS", "aliases": ["css3"]},
+    {"canonical": "Svelte", "aliases": ["sveltejs"]}
+  ]
+}

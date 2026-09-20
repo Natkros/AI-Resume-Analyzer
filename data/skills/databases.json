@@ -1,0 +1,14 @@
+{
+  "category": "databases",
+  "skills": [
+    {"canonical": "PostgreSQL", "aliases": ["postgres", "postgressql", "postgre sql"]},
+    {"canonical": "MySQL", "aliases": ["my sql"]},
+    {"canonical": "MongoDB", "aliases": ["mongo", "mongo db"]},
+    {"canonical": "Redis", "aliases": ["redis cache"]},
+    {"canonical": "SQLite", "aliases": ["sqlite3"]},
+    {"canonical": "Elasticsearch", "aliases": ["elastic search", "es"]},
+    {"canonical": "DynamoDB", "aliases": ["dynamo db"]},
+    {"canonical": "Cassandra", "aliases": ["apache cassandra"]},
+    {"canonical": "pgvector", "aliases": ["pg vector"]}
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "category": "cloud",
+  "skills": [
+    {"canonical": "AWS", "aliases": ["amazon web services"]},
+    {"canonical": "AWS EC2", "aliases": ["ec2"]},
+    {"canonical": "AWS S3", "aliases": ["s3"]},
+    {"canonical": "AWS Lambda", "aliases": ["lambda"]},
+    {"canonical": "AWS ECS", "aliases": ["ecs", "elastic container service"]},
+    {"canonical": "AWS EKS", "aliases": ["eks", "elastic kubernetes service"]},
+    {"canonical": "Google Cloud Platform", "aliases": ["gcp", "google cloud"]},
+    {"canonical": "Microsoft Azure", "aliases": ["azure"]},
+    {"canonical": "Vercel", "aliases": ["vercel"]},
+    {"canonical": "Heroku", "aliases": ["heroku"]}
+  ]
+}
