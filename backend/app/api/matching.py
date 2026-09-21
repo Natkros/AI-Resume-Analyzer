@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_optional_user, require_ownership
 from app.core.database import get_db
 from app.core.errors import AppError
-from app.models.orm import Analysis, Job, Resume
+from app.models.orm import Analysis, Job, Resume, User
 from app.providers.factory import get_embedding_provider
 from app.scoring.ats_analyzer import analyze_ats
 from app.scoring.compatibility_score import compute_compatibility_score
@@ -41,13 +42,15 @@ def _run_analysis(resume_row: Resume, job_row: Job) -> tuple[dict, dict, dict]:
 
 
 @router.post("/analyze", response_model=MatchResponse, status_code=status.HTTP_201_CREATED)
-def analyze_match(payload: MatchRequest, db: Session = Depends(get_db)):
+def analyze_match(payload: MatchRequest, db: Session = Depends(get_db), user: User | None = Depends(get_optional_user)):
     resume_row = db.get(Resume, payload.resume_id)
     if not resume_row:
         raise AppError(404, "RESUME_NOT_FOUND", "Resume not found.")
+    require_ownership(resume_row, user)
     job_row = db.get(Job, payload.job_id)
     if not job_row:
         raise AppError(404, "JOB_NOT_FOUND", "Job not found.")
+    require_ownership(job_row, user)
 
     score_dict, match_dict, ats_dict = _run_analysis(resume_row, job_row)
 
@@ -70,10 +73,13 @@ def analyze_match(payload: MatchRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/{analysis_id}", response_model=MatchResponse)
-def get_analysis(analysis_id: str, db: Session = Depends(get_db)):
+def get_analysis(analysis_id: str, db: Session = Depends(get_db), user: User | None = Depends(get_optional_user)):
     analysis = db.get(Analysis, analysis_id)
     if not analysis:
         raise AppError(404, "ANALYSIS_NOT_FOUND", "Analysis not found.")
+    resume_row = db.get(Resume, analysis.resume_id)
+    if resume_row:
+        require_ownership(resume_row, user)
     return MatchResponse(
         id=analysis.id, resume_id=analysis.resume_id, job_id=analysis.job_id,
         compatibility=analysis.score_json, match=analysis.match_json, ats=analysis.ats_json,
@@ -81,12 +87,15 @@ def get_analysis(analysis_id: str, db: Session = Depends(get_db)):
 
 
 @router.post("/compare", status_code=status.HTTP_200_OK)
-def compare_jobs(resume_id: str, job_ids: list[str], db: Session = Depends(get_db)):
+def compare_jobs(
+    resume_id: str, job_ids: list[str], db: Session = Depends(get_db), user: User | None = Depends(get_optional_user)
+):
     """Phase 32: compare one resume against multiple jobs, ranked but with
     full criteria breakdown shown (never a bare ranked list)."""
     resume_row = db.get(Resume, resume_id)
     if not resume_row:
         raise AppError(404, "RESUME_NOT_FOUND", "Resume not found.")
+    require_ownership(resume_row, user)
 
     results = []
     for job_id in job_ids:

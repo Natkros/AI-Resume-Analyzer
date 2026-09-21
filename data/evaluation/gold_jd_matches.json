@@ -1,0 +1,23 @@
+{
+  "description": "Gold matching pairs: each entry gives a JD, the resume gold id to match against, and the expected matched/missing required skills, for evaluating matching precision/recall.",
+  "cases": [
+    {
+      "jd_text": "Backend Engineer\n\nRequirements:\n- Required: Python\n- Required: FastAPI\n- Required: PostgreSQL\n- Required: Kubernetes\n- 2+ years of experience required.\n",
+      "resume_id": "resume_001",
+      "expected_matched_required": ["Python", "FastAPI", "PostgreSQL"],
+      "expected_missing_required": ["Kubernetes"]
+    },
+    {
+      "jd_text": "ML Engineer\n\nRequirements:\n- Required: Python\n- Required: PyTorch\n- Required: Natural Language Processing\n- Required: AWS ECS\n",
+      "resume_id": "resume_002",
+      "expected_matched_required": ["Python", "PyTorch", "Natural Language Processing"],
+      "expected_missing_required": ["AWS ECS"]
+    },
+    {
+      "jd_text": "Frontend Engineer\n\nRequirements:\n- Required: React\n- Required: TypeScript\n- Required: GraphQL\n",
+      "resume_id": "resume_003",
+      "expected_matched_required": ["React", "TypeScript"],
+      "expected_missing_required": ["GraphQL"]
+    }
+  ]
+}

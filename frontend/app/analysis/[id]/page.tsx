@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { getAnalysis, MatchResponse, ApiError } from "@/lib/api";
 
-export default function AnalysisPage({ params }: { params: { id: string } }) {
+export default function AnalysisPage() {
+  const params = useParams<{ id: string }>();
   const [data, setData] = useState<MatchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -90,6 +92,21 @@ export default function AnalysisPage({ params }: { params: { id: string } }) {
             <li key={idx}>{r}</li>
           ))}
         </ul>
+      </section>
+
+      <section className="rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="font-semibold">Go deeper (requires an LLM key configured on the backend)</h2>
+        <div className="mt-3 flex flex-wrap gap-3 text-sm">
+          <a href={`/optimization/${data.id}`} className="rounded-lg border border-slate-300 px-4 py-2 hover:bg-slate-50">
+            Optimize resume
+          </a>
+          <a href={`/interview/${data.id}`} className="rounded-lg border border-slate-300 px-4 py-2 hover:bg-slate-50">
+            Interview prep
+          </a>
+          <a href={`/roadmap/${data.id}`} className="rounded-lg border border-slate-300 px-4 py-2 hover:bg-slate-50">
+            Skill gap roadmap
+          </a>
+        </div>
       </section>
     </div>
   );

@@ -11,6 +11,7 @@ error rather than returning unvalidated text.
 from __future__ import annotations
 
 from app.providers.base import LLMProvider
+from app.retrieval.knowledge_base import KnowledgeBase
 
 SAFETY_PREAMBLE = (
     "You are analyzing a candidate's resume against a job description. "
@@ -104,15 +105,48 @@ def _grounded_context(resume_text: str, jd_text: str, missing_skills: list[str],
     )
 
 
+def _rag_context(kb: KnowledgeBase | None, query: str, top_k: int = 3) -> tuple[str, list[dict]]:
+    """Phase 8: retrieve grounding passages from the knowledge base for a query.
+    Returns (prompt_block, sources) so callers can cite what was actually used."""
+    if kb is None or not query.strip():
+        return "", []
+    hits = kb.retrieve(query, top_k=top_k)
+    if not hits:
+        return "", []
+    lines = ["RELEVANT KNOWLEDGE BASE CONTEXT (use only if genuinely applicable, do not force it):"]
+    sources = []
+    for hit in hits:
+        lines.append(f"- ({hit.record.metadata.get('source')}) {hit.record.text}")
+        sources.append({
+            "source": hit.record.metadata.get("source"),
+            "heading": hit.record.metadata.get("heading"),
+            "similarity": round(hit.score, 4),
+        })
+    return "\n".join(lines) + "\n\n", sources
+
+
 def generate_recommendations(
-    llm: LLMProvider, resume_text: str, jd_text: str, missing_skills: list[str], matched_skills: list[str]
+    llm: LLMProvider,
+    resume_text: str,
+    jd_text: str,
+    missing_skills: list[str],
+    matched_skills: list[str],
+    knowledge_base: KnowledgeBase | None = None,
 ) -> dict:
-    prompt = SAFETY_PREAMBLE + _grounded_context(resume_text, jd_text, missing_skills, matched_skills) + (
-        "Generate 3-6 prioritized, actionable recommendations to improve this resume's match "
+    rag_block, sources = _rag_context(
+        knowledge_base, "resume quality ATS best practices " + " ".join(missing_skills)
+    )
+    prompt = (
+        SAFETY_PREAMBLE
+        + _grounded_context(resume_text, jd_text, missing_skills, matched_skills)
+        + rag_block
+        + "Generate 3-6 prioritized, actionable recommendations to improve this resume's match "
         "for this specific job. Each recommendation must cite evidence from the resume or JD."
     )
     response = llm.generate(prompt, schema=RECOMMENDATION_SCHEMA, max_tokens=1200)
-    return response.raw_json or {"recommendations": [], "raw_text": response.text}
+    result = response.raw_json or {"recommendations": [], "raw_text": response.text}
+    result["retrieved_sources"] = sources
+    return result
 
 
 def optimize_resume(llm: LLMProvider, resume_text: str, jd_text: str, matched_skills: list[str]) -> dict:
@@ -126,27 +160,44 @@ def optimize_resume(llm: LLMProvider, resume_text: str, jd_text: str, matched_sk
 
 
 def generate_interview_questions(
-    llm: LLMProvider, resume_text: str, jd_text: str, missing_skills: list[str], matched_skills: list[str]
+    llm: LLMProvider,
+    resume_text: str,
+    jd_text: str,
+    missing_skills: list[str],
+    matched_skills: list[str],
+    knowledge_base: KnowledgeBase | None = None,
 ) -> dict:
-    prompt = SAFETY_PREAMBLE + _grounded_context(resume_text, jd_text, missing_skills, matched_skills) + (
-        "Generate role-specific interview questions: technical questions based on matched skills, "
+    rag_block, sources = _rag_context(knowledge_base, "interview preparation guidance " + " ".join(matched_skills))
+    prompt = (
+        SAFETY_PREAMBLE
+        + _grounded_context(resume_text, jd_text, missing_skills, matched_skills)
+        + rag_block
+        + "Generate role-specific interview questions: technical questions based on matched skills, "
         "project questions based on the candidate's actual projects described in the resume, and "
         "behavioral questions relevant to this role/seniority."
     )
     response = llm.generate(prompt, schema=INTERVIEW_SCHEMA, max_tokens=1200)
-    return response.raw_json or {
+    result = response.raw_json or {
         "technical_questions": [], "project_questions": [], "behavioral_questions": [], "raw_text": response.text,
     }
+    result["retrieved_sources"] = sources
+    return result
 
 
-def generate_learning_roadmap(llm: LLMProvider, jd_text: str, missing_skills: list[str]) -> dict:
+def generate_learning_roadmap(
+    llm: LLMProvider, jd_text: str, missing_skills: list[str], knowledge_base: KnowledgeBase | None = None
+) -> dict:
     if not missing_skills:
-        return {"roadmap": []}
+        return {"roadmap": [], "retrieved_sources": []}
+    rag_block, sources = _rag_context(knowledge_base, "skill relationships transferable skills " + " ".join(missing_skills))
     prompt = SAFETY_PREAMBLE + (
         f"JOB DESCRIPTION TEXT:\n{jd_text[:4000]}\n\n"
         f"MISSING REQUIRED SKILLS: {', '.join(missing_skills)}\n\n"
-        "For each missing skill, produce a learning roadmap entry: why it matters for this role, "
+        + rag_block
+        + "For each missing skill, produce a learning roadmap entry: why it matters for this role, "
         "prerequisites, a learning sequence, a practical project to build, and a way to validate the skill."
     )
     response = llm.generate(prompt, schema=ROADMAP_SCHEMA, max_tokens=1500)
-    return response.raw_json or {"roadmap": [], "raw_text": response.text}
+    result = response.raw_json or {"roadmap": [], "raw_text": response.text}
+    result["retrieved_sources"] = sources
+    return result

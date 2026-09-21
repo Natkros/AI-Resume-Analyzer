@@ -1,0 +1,7 @@
+{
+  "id": "resume_003",
+  "text": "Sam Torres\nsam.torres@example.com | (555) 444-9999\n\nSKILLS\nJavaScript, TypeScript, React, Next.js, Node.js, MongoDB\n\nPROFESSIONAL EXPERIENCE\nFrontend Engineer, PixelWorks\n- Built dashboards using React and TypeScript.\n- Improved page load time by 25% through code splitting.\n\nPROJECTS\nTask Tracker App\n- Built a full-stack app with Next.js and MongoDB.\n\nEDUCATION\nBachelor of Arts in Information Systems, Hilltop College, 2019\n",
+  "expected_skills": ["JavaScript", "TypeScript", "React", "Next.js", "Node.js", "MongoDB"],
+  "expected_sections": ["skills", "experience", "projects", "education"],
+  "expected_email": "sam.torres@example.com"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "resume_002",
+  "text": "Priya Sharma\npriya.sharma@example.com\nlinkedin.com/in/priyasharma | github.com/priyasharma\n\nSUMMARY\nML engineer focused on NLP.\n\nSKILLS\nPython, PyTorch, scikit-learn, spaCy, Machine Learning, Natural Language Processing\n\nWORK HISTORY\nML Engineer, DataForge\n- Developed an NLP classification pipeline achieving 91% validation accuracy.\n- Processed 2M documents using a spaCy-based extraction pipeline.\n\nEDUCATION\nMaster of Science in Data Science, Lakeside University, 2020\n\nCERTIFICATIONS\nAWS Certified Machine Learning - Specialty\n",
+  "expected_skills": ["Python", "PyTorch", "scikit-learn", "spaCy", "Machine Learning", "Natural Language Processing"],
+  "expected_sections": ["summary", "skills", "experience", "education", "certifications"],
+  "expected_email": "priya.sharma@example.com"
+}

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, UploadFile, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_optional_user
+from app.api.deps import get_current_user, get_optional_user, require_ownership
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.core.errors import AppError
@@ -61,9 +61,28 @@ async def upload_resume(
     return ResumeDetail(id=resume.id, filename=resume.filename, used_ocr=resume.used_ocr, parsed=resume.parsed_json)
 
 
+@router.get("", response_model=list[ResumeSummary])
+def list_my_resumes(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """Phase 62: multi-resume support — list resumes owned by the current user."""
+    resumes = db.query(Resume).filter(Resume.owner_id == user.id).order_by(Resume.created_at.desc()).all()
+    return [ResumeSummary(id=r.id, filename=r.filename, used_ocr=r.used_ocr) for r in resumes]
+
+
 @router.get("/{resume_id}", response_model=ResumeDetail)
-def get_resume(resume_id: str, db: Session = Depends(get_db)):
+def get_resume(resume_id: str, db: Session = Depends(get_db), user: User | None = Depends(get_optional_user)):
     resume = db.get(Resume, resume_id)
     if not resume:
         raise AppError(404, "RESUME_NOT_FOUND", "Resume not found.")
+    require_ownership(resume, user)
     return ResumeDetail(id=resume.id, filename=resume.filename, used_ocr=resume.used_ocr, parsed=resume.parsed_json)
+
+
+@router.delete("/{resume_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_resume(resume_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """Phase 41 privacy: lets an owner delete their uploaded resume data on request."""
+    resume = db.get(Resume, resume_id)
+    if not resume:
+        raise AppError(404, "RESUME_NOT_FOUND", "Resume not found.")
+    require_ownership(resume, user)
+    db.delete(resume)
+    db.commit()

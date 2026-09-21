@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import auth, jobs, matching, recommendations, resumes
+from app.api import agents, async_processing, auth, jobs, matching, recommendations, resumes
 from app.core.config import get_settings
 from app.core.logging import configure_logging, get_logger, request_id_ctx
 
@@ -68,6 +68,8 @@ app.include_router(resumes.router)
 app.include_router(jobs.router)
 app.include_router(matching.router)
 app.include_router(recommendations.router)
+app.include_router(agents.router)
+app.include_router(async_processing.router)
 
 
 @app.get("/health")

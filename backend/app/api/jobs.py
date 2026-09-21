@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_optional_user
+from app.api.deps import get_current_user, get_optional_user, require_ownership
 from app.core.database import get_db
 from app.core.errors import AppError
 from app.models.orm import Job, User
@@ -49,9 +49,16 @@ def analyze_job(
     return JobDetail(id=job.id, title=job.title, company=job.company, parsed=job.parsed_json)
 
 
+@router.get("", response_model=list[JobDetail])
+def list_my_jobs(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    jobs = db.query(Job).filter(Job.owner_id == user.id).order_by(Job.created_at.desc()).all()
+    return [JobDetail(id=j.id, title=j.title, company=j.company, parsed=j.parsed_json) for j in jobs]
+
+
 @router.get("/{job_id}", response_model=JobDetail)
-def get_job(job_id: str, db: Session = Depends(get_db)):
+def get_job(job_id: str, db: Session = Depends(get_db), user: User | None = Depends(get_optional_user)):
     job = db.get(Job, job_id)
     if not job:
         raise AppError(404, "JOB_NOT_FOUND", "Job not found.")
+    require_ownership(job, user)
     return JobDetail(id=job.id, title=job.title, company=job.company, parsed=job.parsed_json)

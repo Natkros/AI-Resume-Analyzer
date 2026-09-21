@@ -12,6 +12,7 @@ build/
 node_modules/
 .next/
 out/
+*.tsbuildinfo
 coverage/
 *.log
 .DS_Store

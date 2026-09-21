@@ -139,6 +139,7 @@ def _classify_statement(statement: str) -> tuple[str, bool]:
 def parse_job_description(text: str) -> ParsedJobDescription:
     taxonomy = get_skill_taxonomy()
     statements = _split_statements(text)
+    job_title = _guess_job_title(text)
 
     items: list[RequirementItem] = []
     required_skills: set[str] = set()
@@ -148,6 +149,11 @@ def parse_job_description(text: str) -> ParsedJobDescription:
     responsibilities: list[str] = []
 
     for statement in statements:
+        # The job title line (e.g. "ML Engineer") is a heading, not a
+        # requirement statement — classifying it as one lets short skill
+        # aliases like "ML" leak into required_skills.
+        if job_title and statement.strip().lower() == job_title.strip().lower():
+            continue
         category, is_required = _classify_statement(statement)
         skills_in_statement = taxonomy.extract_from_text(statement)
 
@@ -188,7 +194,7 @@ def parse_job_description(text: str) -> ParsedJobDescription:
     all_skills_mentioned = sorted(set(taxonomy.extract_from_text(text)))
 
     return ParsedJobDescription(
-        job_title=_guess_job_title(text),
+        job_title=job_title,
         seniority=_guess_seniority(text),
         required_skills=sorted(required_skills),
         preferred_skills=sorted(preferred_skills),

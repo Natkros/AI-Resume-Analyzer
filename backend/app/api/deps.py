@@ -24,6 +24,18 @@ def get_current_user(
     return user
 
 
+def require_ownership(resource, user: User | None) -> None:
+    """Enforce that a resource with an owner can only be accessed by that
+    owner. A resource created anonymously (owner_id is None) stays
+    accessible to anyone holding its ID, matching the optional-auth model
+    used throughout the API — only OWNED resources are access-controlled."""
+    owner_id = getattr(resource, "owner_id", None)
+    if owner_id is None:
+        return
+    if user is None or user.id != owner_id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "You do not have access to this resource.")
+
+
 def get_optional_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
     db: Session = Depends(get_db),

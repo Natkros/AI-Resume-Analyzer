@@ -1,0 +1,7 @@
+{
+  "id": "resume_001",
+  "text": "Alex Kim\nalex.kim@example.com | 555-222-3333\n\nSKILLS\nPython, FastAPI, PostgreSQL, Docker, AWS\n\nPROFESSIONAL EXPERIENCE\nBackend Engineer, Northwind Labs\n- Built REST APIs using FastAPI for a production data platform.\n- Reduced query latency by 40% through PostgreSQL index tuning.\n\nPROJECTS\nInventory Sync Service\n- Built a Docker-based microservice deployed on AWS ECS.\n\nEDUCATION\nBachelor of Science in Computer Science, Riverdale University, 2021\n",
+  "expected_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS", "AWS ECS"],
+  "expected_sections": ["skills", "experience", "projects", "education"],
+  "expected_email": "alex.kim@example.com"
+}
